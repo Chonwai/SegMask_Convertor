@@ -28,16 +28,16 @@ def annotation2mask(annotations_path, images_path, result_path):
         I = io.imread(
             "{images_path}/{file_name}".format(images_path=images_path, file_name=img['file_name']))
         h, w, _ = I.shape
-        print(str(h), str(w))
-        plt.subplots(figsize=(w/100, h/100))
-        plt.imshow(I)
-        plt.axis('off')
 
         annIds = coco.getAnnIds(imgIds=img['id'], catIds=catIds, iscrowd=None)
         anns = coco.loadAnns(annIds)
-        coco.showAnns(anns)
 
-        plt.savefig("{result_path}/{file_name}".format(result_path=result_path,
-                    file_name=img['file_name']), bbox_inches='tight', pad_inches=0)
-        plt.close()
+        anns_img = np.zeros((img['height'], img['width']))
+
+        for ann in anns:
+            anns_img = np.maximum(
+                anns_img, coco.annToMask(ann)*ann['category_id'])
+
+        cv2.imwrite("{result_path}/{file_name}.png".format(result_path=result_path,
+                                                           file_name=img['file_name'].replace('.jpg', '')), anns_img)
         pass
