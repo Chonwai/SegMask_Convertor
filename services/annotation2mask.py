@@ -12,7 +12,6 @@ def annotation2mask(annotations_path, images_path, result_path):
     annotationsFile = annotations_path
     coco = COCO(annotationsFile)
 
-    # display COCO categories and supercategories
     cats = coco.loadCats(coco.getCatIds())
     nms = [cat['name'] for cat in cats]
     print('COCO categories: \n{}\n'.format(' '.join(nms)))
@@ -24,10 +23,6 @@ def annotation2mask(annotations_path, images_path, result_path):
 
     for i in coco.getImgIds():
         img = coco.loadImgs(i)[0]
-
-        I = io.imread(
-            "{images_path}/{file_name}".format(images_path=images_path, file_name=img['file_name']))
-        h, w, _ = I.shape
 
         annIds = coco.getAnnIds(imgIds=img['id'], catIds=catIds, iscrowd=None)
         anns = coco.loadAnns(annIds)
