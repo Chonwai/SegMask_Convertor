@@ -19,7 +19,7 @@ def annotation2mask(annotations_path, images_path, result_path):
     nms = set([cat['supercategory'] for cat in cats])
     print('COCO supercategories: \n{}'.format(' '.join(nms)))
 
-    catIds = coco.getCatIds(catNms=['person'])
+    catIds = coco.getCatIds()
 
     for i in coco.getImgIds():
         img = coco.loadImgs(i)[0]
@@ -35,4 +35,6 @@ def annotation2mask(annotations_path, images_path, result_path):
 
         cv2.imwrite("{result_path}/{file_name}.png".format(result_path=result_path,
                                                            file_name=img['file_name'].replace('.jpg', '')), anns_img)
+
+        print(img['file_name'] + " finished mask~")
         pass
